@@ -4,14 +4,14 @@ const toFile = path.join(__dirname, 'project-dist', 'bundle.css');
 const fromStyles = path.join(__dirname, 'styles');
 let arr = [];
 
-(async () => {
-    const files = await fsPromises.readdir(fromStyles, { withFileTypes: true });
+fsPromises.readdir(fromStyles, { withFileTypes: true }).then((files)=>{
     for (let item of files) {
         const pathToCurrentFile = path.join(fromStyles, item.name);
         if (path.extname(pathToCurrentFile)==".css") {
-            const cssContent =await fsPromises.readFile(pathToCurrentFile, 'utf8');
-            arr.push(`${cssContent}\n`);
+            fsPromises.readFile(pathToCurrentFile, 'utf8').then((cssContent)=>{
+                arr.push(`${cssContent}\n`);
+                fsPromises.writeFile(toFile, arr).then
+            });
         }
     }
-    await fsPromises.writeFile(toFile, arr);
-})();
+});
